@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Strigoi.Companion.Core/Strigoi.Companion.Core.csproj" />
+    <Project Path="src/Strigoi.Companion/Strigoi.Companion.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Strigoi.Companion.Checks/Strigoi.Companion.Checks.csproj" />
+  </Folder>
+</Solution>

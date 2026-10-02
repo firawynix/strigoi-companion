@@ -1,0 +1,14 @@
+{
+  "cellWidth": 192, "cellHeight": 208, "columns": 8, "rows": 11,
+  "clips": {
+    "idle": {"row":0,"frames":[0,1,2,3,4,5],"frameMs":260,"loop":true},
+    "blink": {"row":0,"frames":[3,4,5],"frameMs":120,"loop":false},
+    "happy": {"row":3,"frames":[0,1,2,3],"frameMs":150,"loop":true},
+    "excited": {"row":4,"frames":[0,1,2,3,4],"frameMs":120,"loop":true},
+    "thinking": {"row":8,"frames":[0,1,2,3,4,5],"frameMs":210,"loop":true},
+    "warning": {"row":8,"frames":[0],"frameMs":200,"loop":false,"fallback":"Pose de atenção + indicador; arte de alerta pendente."},
+    "facepalm": {"row":5,"frames":[0,1,2,3,4,5,6,7],"frameMs":160,"loop":false,"fallback":"Sequência failed; não é facepalm dedicado."},
+    "shocked": {"row":7,"frames":[3],"frameMs":200,"loop":false,"fallback":"Pose expressiva existente; arte dedicada pendente."},
+    "sleep": {"row":0,"frames":[4],"frameMs":200,"loop":false,"fallback":"Pose de olhos fechados; animação de sono pendente."}
+  }
+}

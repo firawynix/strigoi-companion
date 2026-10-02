@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF><UseWindowsForms>true</UseWindowsForms><Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings><ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>Strigoi.Companion</AssemblyName><Version>0.7.5</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>Assets/companion.ico</ApplicationIcon>
+    <!-- WPF owns startup and DPI. WinForms is used only for tray and monitor enumeration. -->
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Strigoi.Companion.Core/Strigoi.Companion.Core.csproj"/></ItemGroup>
+  <ItemGroup><Content Include="Assets/spritesheet.png;Assets/familiar.json;Assets/PROVENANCE.md" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
+</Project>

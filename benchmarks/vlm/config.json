@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "first_candidate": "qwen3.5:2b",
+  "runtime_context_tokens": 8192,
+  "budgets": {
+    "watch_probe": {"max_image_edge": 512, "max_context_chars": 2000, "max_output_tokens": 192, "timeout_seconds": 15},
+    "ask": {"max_image_edge": 1280, "max_context_chars": 12000, "max_output_tokens": 512, "timeout_seconds": 45}
+  },
+  "proposed_acceptance": {
+    "minimum_real_cases": 24,
+    "minimum_repetitions": 3,
+    "critical_dialogue_exact_accuracy": 0.95,
+    "event_macro_f1": 0.90,
+    "structured_valid_fraction": 0.99,
+    "ask_human_mean_0_to_4": 3.0,
+    "unsupported_critical_claims": 0,
+    "watch_p95_seconds": 2.0,
+    "ask_p95_seconds": 8.0,
+    "average_fps_drop_percent": 2.0,
+    "one_percent_low_drop_percent": 3.0
+  }
+}

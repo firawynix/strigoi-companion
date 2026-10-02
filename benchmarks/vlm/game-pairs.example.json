@@ -1,0 +1,11 @@
+{
+  "note": "Template only: supply separate recorded CSVs. Same scene/save/settings, same instrumentation, alternating baseline/treatment order. No data supplied here.",
+  "column": "FrameTime",
+  "baseline_condition": "pet and capture active, VLM not resident",
+  "treatment_condition": "same pet/capture, one 2B resident and benchmark requests",
+  "pairs": [
+    {"id":"pair-1", "baseline":"baseline-1.csv", "treatment":"treatment-1.csv", "baseline_pid":0, "treatment_pid":0},
+    {"id":"pair-2", "baseline":"baseline-2.csv", "treatment":"treatment-2.csv", "baseline_pid":0, "treatment_pid":0},
+    {"id":"pair-3", "baseline":"baseline-3.csv", "treatment":"treatment-3.csv", "baseline_pid":0, "treatment_pid":0}
+  ]
+}

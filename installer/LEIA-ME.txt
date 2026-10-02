@@ -1,0 +1,102 @@
+STRIGOI COMPANION 0.6.0
+
+Seu Familiar acompanha seu jogo e mantém memória local por run.
+
+ABRIR
+Use o atalho da área de trabalho ou procure Strigoi Companion no menu Iniciar.
+Clique esquerdo no Familiar para conversar. Clique direito abre controles rápidos.
+O ícone 👁 abaixo dele liga ou pausa o acompanhamento. Ctrl + Alt + F10 abre o Control Center.
+O ícone do vampirinho também fica na bandeja
+do Windows, perto do relógio (pode estar na lista de ícones ocultos).
+
+MOVER E AJUSTAR
+Nos controles, escolha Reposicionar e arraste o pet. Ajuste o tamanho e depois
+volte para Bloqueado. Nesse modo, os cliques devem passar para o jogo.
+
+USAR COM UM JOGO
+Abra o Companion e depois um jogo em janela ou borderless. O Familiar identifica
+a janela de modo conservador e cria ou retoma o Chronicle. Clique esquerdo para
+Quick Talk e direito para recap, runs, web research e spoilers. O Control Center
+mantém captura manual, prévia e diagnóstico como fallback.
+
+TESTAR COM UM JOGO
+1. Abra um jogo em janela ou borderless.
+2. Abra os controles e clique em Testar com meu jogo.
+3. Informe o jogo, inicie a medição e minimize os painéis.
+4. Jogue normalmente e confira cliques, foco e fluidez.
+5. Volte ao painel, responda o que testou e salve a avaliação local.
+
+A medição dura até 30 minutos. Você pode encerrar antes, e o relatório indicará
+que foi uma amostra curta. Abrir pasta dos relatórios mostra o arquivo para
+compartilhar na conversa do projeto.
+
+ESTA VERSÃO
+Pet animado, escala, reposicionamento, bloqueio, pausa e prévias de expressões.
+Captura local opcional, detecção de mudanças visuais e Ask/Talk experimental
+com modelo local. A medição observa CPU e memória do próprio Companion; não mede FPS do jogo.
+
+SAIR OU DESINSTALAR
+Use Sair no menu do ícone da bandeja. Para desinstalar, feche o pet e use
+Aplicativos nas Configurações do Windows. Preferências e relatórios são mantidos.
+
+Instalação: %LOCALAPPDATA%\Programs\Strigoi Companion
+Preferências e relatórios: %LOCALAPPDATA%\StrigoiCompanion
+
+ATUALIZAR
+Feche o pet usando Sair na bandeja. Execute Strigoi-Companion-Setup-0.6.0.exe.
+O assistente reconhece a instalação anterior e atualiza no mesmo local.
+Preferências e relatórios são preservados. Não é preciso desinstalar antes.
+Se o pet estiver aberto, o assistente permite fechar e tentar novamente.
+
+CAPTURA LOCAL (EXPERIMENTAL)
+1. Abra o jogo em janela ou borderless.
+2. Nos controles do pet, abra Captura local · escolher janela.
+3. Atualize a lista, selecione a janela e clique em Iniciar captura.
+4. Confira a prévia e o contador de mudanças visuais.
+5. Use Pausar, Retomar ou Encerrar. Fechar o painel também encerra a captura.
+
+Imagens ficam apenas em memória, sem envio ou gravação automática.
+Minimizar/fechar o jogo encerra a captura; restaure-o e inicie novamente.
+A captura não inicia sozinha. Até 2 imagens por segundo são analisadas.
+Mudança visual não identifica diálogo, missão, perigo ou escolha. HDR e tela
+cheia exclusiva ainda não foram homologados. Limite: 8,8 milhões de pixels.
+
+
+REVER IMAGENS RECENTES
+Durante a captura, clique em Rever recentes. Use Anterior e Próxima para navegar.
+O horário indica o tempo desde o início da sessão. A captura continua enquanto
+você revê essa sequência fixa. Voltar ao vivo mostra a imagem mais recente.
+São até oito amostras, não um vídeo. Pausar, encerrar ou fechar limpa o replay.
+Tudo fica em memória: até 7,1 MiB de histórico e mais 7,1 MiB para a revisão,
+além das superfícies de captura e da prévia.
+
+RELATÓRIO DA CAPTURA
+Depois de iniciar uma sessão, use Salvar relatório da sessão. O arquivo fica em
+%LOCALAPPDATA%\StrigoiCompanion\reports e registra duração, janela escolhida,
+quantidade de imagens, mudanças visuais e uso de replay/pausa/retomada. Ele não
+guarda imagens, FPS do jogo, textos da tela ou inferências.
+
+ASK/TALK EXPERIMENTAL
+Com a captura ativa e uma prévia disponível, escreva uma pergunta em Pergunte
+sobre a imagem atual e clique em Perguntar ao Familiar. Só a imagem atual é
+enviada ao Ollama local em localhost; ela não é gravada ou enviada à internet.
+O modelo qwen3.5:2b precisa estar instalado localmente. Não há observação
+automática do jogo, Watch Mode ou troca de modelos. Se a captura terminar, a
+resposta pendente é descartada.
+
+JOGO DA SESSÃO
+O campo Jogo desta sessão vem da janela escolhida. Confirme ou edite o nome
+antes de perguntar. O Companion mostra esse nome como identidade da sessão e
+não aceita uma identificação especulativa do modelo visual.
+
+GAME CHRONICLE
+Cada jogo e run têm memória local persistente: journals, eventos, fatos que você
+mandou lembrar, promessas e um recap. Abra a captura, confirme o jogo, escolha a
+run e use os controles do Game Chronicle. Os dados ficam em
+%LOCALAPPDATA%\StrigoiCompanion\games; imagens não são adicionadas a eles.
+
+PESQUISA WEB
+Pesquisa web é desligada por padrão. Quando habilitada, manda somente o nome do
+jogo e a pergunta; nunca imagens ou journals. Escolha a política blind, hint,
+light ou full antes de perguntar sobre consequências. Resultado externo mantém
+fonte e confiança próprias.
