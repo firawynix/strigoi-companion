@@ -57,8 +57,20 @@ internal sealed class ControlWindow : Window
         stack.Children.Add(Button("Testar com meu jogo", validate ?? (() => { })));
         if (WorkAssistantBridge.IsAvailable)
         {
-            Label(stack, "ASSISTENTE DE TRABALHO");
-            stack.Children.Add(Button("Abrir assistente de trabalho · tarefas, notas e checklists", WorkAssistantBridge.Open));
+            Label(stack,
+#if GAME_FUSION
+                "DIÁRIO DE JOGO"
+#else
+                "ASSISTENTE DE TRABALHO"
+#endif
+            );
+            stack.Children.Add(Button(
+#if GAME_FUSION
+                "Abrir missões, objetivos e notas"
+#else
+                "Abrir assistente de trabalho · tarefas, notas e checklists"
+#endif
+                , WorkAssistantBridge.Open));
         }
         stack.Children.Add(Button("Pronto · voltar ao jogo", Close));
         KeyDown += (_, e) => { if (e.Key == Key.Escape) Close(); };

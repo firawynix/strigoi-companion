@@ -29,7 +29,7 @@ public sealed record WatchAssessment(string Event, int Importance, double Confid
 
 public static class WatchAssessmentParser
 {
-    private static readonly string[] Events = ["possible_player_death", "dialogue_detected", "achievement_or_reward", "combat_high_activity", "possible_victory", "notable_gameplay_event", "unknown"];
+    private static readonly string[] Events = ["possible_player_death", "dialogue_detected", "achievement_or_reward", "combat_high_activity", "possible_victory", "notable_gameplay_event", "work_progress", "work_notification", "work_error", "unknown"];
     public static bool TryParse(string text, out WatchAssessment assessment)
     {
         assessment = null!;

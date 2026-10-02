@@ -15,12 +15,14 @@ namespace Strigoi.Companion;
 // player identity, or the local memory package passed to the VLM.
 internal sealed partial class DuckDuckGoResearchProvider : IWebResearchProvider, IDisposable
 {
+    private readonly bool workMode;
+    internal DuckDuckGoResearchProvider(bool workMode = false) => this.workMode = workMode;
     private readonly HttpClient client = new() { BaseAddress = new Uri("https://api.duckduckgo.com/"), Timeout = TimeSpan.FromSeconds(12) };
 
     public async Task<ResearchResult> ResearchGameQuestion(ResearchRequest request, CancellationToken cancellationToken)
     {
-        if (request.SpoilerPolicy == SpoilerPolicy.blind) return new ResearchResult([], []);
-        var suffix = request.SpoilerPolicy switch { SpoilerPolicy.hint => " spoiler free hint", SpoilerPolicy.light => " guide", _ => " full consequences" };
+        if (!workMode && request.SpoilerPolicy == SpoilerPolicy.blind) return new ResearchResult([], []);
+        var suffix = workMode ? "" : request.SpoilerPolicy switch { SpoilerPolicy.hint => " spoiler free hint", SpoilerPolicy.light => " guide", _ => " full consequences" };
         var game = CleanGameName(request.Game);
         var searchTerms = (game + " " + request.Query + suffix);
         var query = Uri.EscapeDataString(searchTerms[..Math.Min(500, searchTerms.Length)]);

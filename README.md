@@ -2,7 +2,16 @@
 
 Versão atual do código: **0.8.0**. Aplicativo gratuito para Windows. O código e os recursos visuais são distribuídos sem uma licença de reutilização pública declarada; consulte a proveniência dos sprites antes de redistribuir ou modificar os assets.
 
-O [Strigoi Companion](https://apps.microsoft.com/detail/9PHG56TB7W4N) versão 0.7.5 foi publicado gratuitamente na Microsoft Store em 2 de outubro de 2026. A atualização integrada **Strigoi Companion Assistant** versão 0.8.0 usa o mesmo produto da Store e foi enviada à certificação em 2 de outubro de 2026. Seu pacote pode ser criado com `scripts/build-store-suite.ps1`.
+O [Strigoi Companion](https://apps.microsoft.com/detail/9PHG56TB7W4N) versão 0.7.5 foi publicado gratuitamente na Microsoft Store em 2 de outubro de 2026. A atualização 0.8.0 no produto existente está em certificação para restaurar o nome **Strigoi Companion**.
+
+## Novos aplicativos combinados — 1.0.0
+
+Os dois novos aplicativos usam os mesmos recursos de planejamento, notas, checklists, avisos, assistente animado, captura de janela, memória de sessão, perguntas com Ollama, pesquisa opcional, replay e relatórios, com identidades e dados separados:
+
+- **Strigoi Companion Assistant**: visual roxo do Strigoi para jogos. O planejador do Firaw roda no mesmo processo, com projetos apresentados como jogos e tarefas como missões.
+- **Firaw - Work Companion Assistant**: visual ciano do Firaw para trabalho. O painel **Acompanhar** reúne os recursos de captura e memória do Strigoi, usando projetos e sessões de trabalho. A captura depende de ativação pelo usuário; a pesquisa na web é opcional.
+
+As versões originais continuam em seus produtos e perfis. Para gerar os novos pacotes MSIX x64/x86, mantenha este repositório e `firaw-work-assistant` lado a lado. Preencha as identidades reservadas da Store em `installer/fusion-identities.json` e execute `./scripts/build-fusion-store.ps1 -Kind both`. Os pacotes são criados em `artifacts/fusion-store/`.
 
 ## Dois aplicativos integrados
 

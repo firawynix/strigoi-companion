@@ -24,12 +24,29 @@ internal static class Program
         bool stability = args.Length == 3 && args[0] == "--stability-test" && int.TryParse(args[1], out var requestedSeconds) && requestedSeconds is >= 30 and <= 1800;
         bool captureTest = args.Length == 2 && args[0] == "--capture-test";
         bool storeScreenshot = args.Length == 2 && args[0] == "--store-screenshot";
-        bool diagnostic = smoke || stability || captureTest || storeScreenshot;
+#if GAME_FUSION
+        bool fusionSmoke = args.Length == 2 && args[0] == "--fusion-smoke-test";
+#else
+        bool fusionSmoke = false;
+#endif
+        bool diagnostic = smoke || stability || captureTest || storeScreenshot || fusionSmoke;
         if (args.Length > 0 && !diagnostic) return 2;
         string reportDirectory = diagnostic ? Path.GetFullPath(args[^1]) : "";
-        using var mutex = new Mutex(true, diagnostic ? "Local\\Strigoi.Companion.Diagnostics" : "Local\\Strigoi.Companion", out bool first);
+        using var mutex = new Mutex(true, diagnostic ? "Local\\Strigoi.Companion.Diagnostics" :
+#if GAME_FUSION
+            "Local\\Strigoi.Companion.Assistant"
+#else
+            "Local\\Strigoi.Companion"
+#endif
+            , out bool first);
         if (!first) { MessageBox.Show("O Familiar já está aberto. Use o ícone da bandeja ou seu atalho (padrão: Ctrl + Alt + F10).", "Strigoi Companion"); return 0; }
-        var directory = diagnostic ? Path.Combine(reportDirectory, "profile") : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "StrigoiCompanion");
+        var directory = diagnostic ? Path.Combine(reportDirectory, "profile") : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+#if GAME_FUSION
+            "StrigoiCompanionAssistant"
+#else
+            "StrigoiCompanion"
+#endif
+        );
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         PetWindow? pet = null;
         ControlWindow? panel = null;
@@ -105,6 +122,9 @@ internal static class Program
         {
             if (quitting) return;
             quitting = true;
+#if GAME_FUSION
+            Firaw.WorkAssistant.CompanionModuleHost.CloseGamePlanner();
+#endif
             familiar?.Dispose(); quickTalk?.Close(); quickControl?.Close(); pet?.SavePosition(); Save(); validation?.Close(); panel?.Close(); tray?.Dispose(); pet?.Close();
             Log("shutdown"); app.Shutdown();
         }
@@ -153,7 +173,18 @@ internal static class Program
                 {
                     try
                     {
-                        if (storeScreenshot)
+                        if (fusionSmoke)
+                        {
+#if GAME_FUSION
+                            Firaw.WorkAssistant.CompanionModuleHost.OpenGamePlanner(Path.Combine(reportDirectory, "planner"));
+                            await Task.Delay(750);
+                            if (!Firaw.WorkAssistant.CompanionModuleHost.IsOpen) throw new InvalidOperationException("O diário de jogo não abriu.");
+                            Directory.CreateDirectory(reportDirectory);
+                            Firaw.WorkAssistant.CompanionModuleHost.SavePreview(Path.Combine(reportDirectory, "strigoi-missions.png"));
+                            File.WriteAllText(Path.Combine(reportDirectory, "fusion-smoke.txt"), "Diário de jogo aberto no processo Strigoi.\n");
+#endif
+                        }
+                        else if (storeScreenshot)
                         {
                             Open();
                             await Task.Delay(500);

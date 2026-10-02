@@ -47,16 +47,18 @@ public sealed class GameChronicleService
     };
     private static readonly JsonSerializerOptions Jsonl = new(Json) { WriteIndented = false };
     private readonly string gamesRoot;
+    private readonly bool workMode;
 
-    public GameChronicleService(string profileDirectory)
+    public GameChronicleService(string profileDirectory, bool workMode = false)
     {
-        gamesRoot = Path.Combine(profileDirectory, "games");
+        this.workMode = workMode;
+        gamesRoot = Path.Combine(profileDirectory, workMode ? "projects" : "games");
         Directory.CreateDirectory(gamesRoot);
     }
 
     public ChronicleGame OpenGame(string displayName)
     {
-        if (string.IsNullOrWhiteSpace(displayName)) throw new ArgumentException("Escolha ou informe o jogo da sessão.");
+        if (string.IsNullOrWhiteSpace(displayName)) throw new ArgumentException(workMode ? "Escolha ou informe o projeto da sessão." : "Escolha ou informe o jogo da sessão.");
         var cleanedName = NormalizeGameDisplayName(displayName);
         var id = GameId(cleanedName);
         var existingDirectory = Directory.EnumerateDirectories(gamesRoot)
@@ -70,7 +72,7 @@ public sealed class GameChronicleService
             game = existing with { DisplayName = cleanedName, LastOpenedAt = DateTimeOffset.UtcNow };
         else
             game = new ChronicleGame(id, cleanedName, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
-        WriteAtomic(gameFile, game); WriteGameMarkdown(gameDirectory, game);
+        WriteAtomic(gameFile, game); WriteGameMarkdown(gameDirectory, game, workMode);
         Directory.CreateDirectory(Path.Combine(gameDirectory, "runs"));
         return game;
     }
@@ -141,7 +143,9 @@ public sealed class GameChronicleService
     {
         var now = DateTimeOffset.Now; var id = now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture) + "-" + Guid.NewGuid().ToString("N")[..8];
         var file = Path.Combine(RunDirectory(game, run), "sessions", id + ".md");
-        File.WriteAllText(file, $"# Session — {now:yyyy-MM-dd HH:mm}\n\nGame: {game.DisplayName}\nRun: {run.DisplayName}\nStarted: {now:O}\n\n## Events\n", Encoding.UTF8);
+        File.WriteAllText(file, workMode
+            ? $"# Sessão — {now:yyyy-MM-dd HH:mm}\n\nProjeto: {game.DisplayName}\nSessão: {run.DisplayName}\nInício: {now:O}\n\n## Eventos\n"
+            : $"# Session — {now:yyyy-MM-dd HH:mm}\n\nGame: {game.DisplayName}\nRun: {run.DisplayName}\nStarted: {now:O}\n\n## Events\n", Encoding.UTF8);
         return new ChronicleSession(id, now, null, file);
     }
 
@@ -268,7 +272,9 @@ public sealed class GameChronicleService
         var entities = item.Entities.Length == 0 ? "" : $"\nEntities: {string.Join(", ", item.Entities)}";
         File.AppendAllText(session.JournalPath, $"\n### {item.Timestamp:HH:mm} — {item.Type}\n\n{item.Summary}\n\nSource: {item.Source}\nConfidence: {item.Confidence:F2}{entities}\n", Encoding.UTF8);
     }
-    private static void WriteGameMarkdown(string directory, ChronicleGame game) => File.WriteAllText(Path.Combine(directory, "game.md"), $"# {game.DisplayName}\n\nGame id: `{game.Id}`\nCreated: {game.CreatedAt:O}\n", Encoding.UTF8);
+    private static void WriteGameMarkdown(string directory, ChronicleGame game, bool workMode) => File.WriteAllText(
+        Path.Combine(directory, workMode ? "project.md" : "game.md"),
+        $"# {game.DisplayName}\n\n{(workMode ? "Project" : "Game")} id: `{game.Id}`\nCreated: {game.CreatedAt:O}\n", Encoding.UTF8);
     private static void WriteRunMarkdown(string directory, ChronicleRun run, RunState state)
     {
         var builder = new StringBuilder($"# Current Run — {run.DisplayName}\n\nUpdated: {state.UpdatedAt:O}\n\n## Promises\n");

@@ -5,11 +5,16 @@
     <UseWPF>true</UseWPF><UseWindowsForms>true</UseWindowsForms><Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings><ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyName>Strigoi.Companion</AssemblyName><Version>0.8.0</Version>
+    <Version Condition="'$(GameFusion)' == 'true'">1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>Assets/companion.ico</ApplicationIcon>
     <!-- WPF owns startup and DPI. WinForms is used only for tray and monitor enumeration. -->
     <NoWarn>$(NoWarn);WFO0003</NoWarn>
+    <DefineConstants Condition="'$(GameFusion)' == 'true'">$(DefineConstants);GAME_FUSION</DefineConstants>
   </PropertyGroup>
   <ItemGroup><ProjectReference Include="../Strigoi.Companion.Core/Strigoi.Companion.Core.csproj"/></ItemGroup>
+  <ItemGroup Condition="'$(GameFusion)' == 'true'">
+    <ProjectReference Include="../../../firaw-work-assistant/Firaw.WorkAssistant.csproj" />
+  </ItemGroup>
   <ItemGroup><Content Include="Assets/spritesheet.png;Assets/familiar.json;Assets/PROVENANCE.md" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
 </Project>
