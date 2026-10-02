@@ -24,7 +24,7 @@ internal sealed class ControlWindow : Window
         stack.Children.Add(Text("STRIGOI COMPANION", 12, "#BD93F9"));
         stack.Children.Add(Text("Control Center", 27));
         stack.Children.Add(Text("O Familiar é a interface principal. Use este painel para ajustes, captura manual e diagnóstico.", 14, "#C1B4D1"));
-        stack.Children.Add(Text("Versão 0.5.0 · captura e Ask/Talk locais.", 13, "#C1B4D1"));
+        stack.Children.Add(Text($"Versão {GetType().Assembly.GetName().Version?.ToString(3)} · captura e Ask/Talk locais.", 13, "#C1B4D1"));
         Label(stack, "INTERAÇÃO");
         modes = new ComboBox { ItemsSource = new[] { "Bloqueado · cliques passam ao jogo", "Interativo · clique no pet para abrir", "Reposicionar · arraste o pet" }, SelectedIndex = (int)pet.Settings.Mode, Margin = new Thickness(0, 4, 0, 8), Padding = new Thickness(6) };
         modes.SelectionChanged += (_, _) => { if (modes.SelectedIndex >= 0 && (int)pet.Settings.Mode != modes.SelectedIndex) pet.SetMode((InteractionMode)modes.SelectedIndex); UpdateStatus(); };

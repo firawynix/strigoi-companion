@@ -7,6 +7,8 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Strigoi.Companion.Core;
 using Forms = System.Windows.Forms;
@@ -21,7 +23,8 @@ internal static class Program
         bool smoke = args.Length == 2 && args[0] == "--smoke-test";
         bool stability = args.Length == 3 && args[0] == "--stability-test" && int.TryParse(args[1], out var requestedSeconds) && requestedSeconds is >= 30 and <= 1800;
         bool captureTest = args.Length == 2 && args[0] == "--capture-test";
-        bool diagnostic = smoke || stability || captureTest;
+        bool storeScreenshot = args.Length == 2 && args[0] == "--store-screenshot";
+        bool diagnostic = smoke || stability || captureTest || storeScreenshot;
         if (args.Length > 0 && !diagnostic) return 2;
         string reportDirectory = diagnostic ? Path.GetFullPath(args[^1]) : "";
         using var mutex = new Mutex(true, diagnostic ? "Local\\Strigoi.Companion.Diagnostics" : "Local\\Strigoi.Companion", out bool first);
@@ -149,7 +152,14 @@ internal static class Program
                 {
                     try
                     {
-                        if (captureTest) await CaptureChecks.Run(pet, reportDirectory);
+                        if (storeScreenshot)
+                        {
+                            Open();
+                            await Task.Delay(500);
+                            if (panel is null) throw new InvalidOperationException("Control Center não abriu.");
+                            SaveStoreScreenshot(panel, pet, reportDirectory);
+                        }
+                        else if (captureTest) await CaptureChecks.Run(pet, reportDirectory);
                         else if (smoke) await Smoke.Run(pet, reportDirectory, store);
                         else
                         {
@@ -173,6 +183,34 @@ internal static class Program
             if (!diagnostic) MessageBox.Show("Não foi possível iniciar o Familiar. " + ex.Message, "Strigoi Companion");
             return 1;
         }
+    }
+
+    private static void SaveStoreScreenshot(Window panel, PetWindow pet, string directory)
+    {
+        Directory.CreateDirectory(directory);
+        panel.UpdateLayout();
+        var width = Math.Max(1, (int)Math.Ceiling(panel.ActualWidth));
+        var height = Math.Max(1, (int)Math.Ceiling(panel.ActualHeight));
+        var panelImage = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+        panelImage.Render(panel);
+        pet.UpdateLayout();
+        var petWidth = Math.Max(1, (int)Math.Ceiling(pet.ActualWidth));
+        var petHeight = Math.Max(1, (int)Math.Ceiling(pet.ActualHeight));
+        var petImage = new RenderTargetBitmap(petWidth, petHeight, 96, 96, PixelFormats.Pbgra32);
+        petImage.Render(pet);
+        var visual = new DrawingVisual();
+        using (var context = visual.RenderOpen())
+        {
+            context.DrawRectangle(new SolidColorBrush(Color.FromRgb(22, 16, 32)), null, new Rect(0, 0, 1366, 768));
+            context.DrawImage(petImage, new Rect(155, (768 - petHeight) / 2.0, petWidth, petHeight));
+            context.DrawImage(panelImage, new Rect((1366 - width) / 2.0, (768 - height) / 2.0, width, height));
+        }
+        var screenshot = new RenderTargetBitmap(1366, 768, 96, 96, PixelFormats.Pbgra32);
+        screenshot.Render(visual);
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(screenshot));
+        using var file = File.Create(Path.Combine(directory, "strigoi-control-center.png"));
+        encoder.Save(file);
     }
 }
 
