@@ -15,13 +15,13 @@ internal sealed class ControlWindow : Window
     public ControlWindow(PetWindow pet, Action save, string? warning, Action? validate = null, Action? capture = null)
     {
         this.pet = pet;
-        Title = "Strigoi Companion · Control Center"; Width = 490; Height = 760;
+        Title = WorkAssistantBridge.IsAvailable ? "Strigoi Companion Assistant · Control Center" : "Strigoi Companion · Control Center"; Width = 490; Height = 760;
         MinWidth = 400; MinHeight = 460; WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Background = Brush("#17131F"); Foreground = Brush("#F3EBFA"); FontFamily = new FontFamily("Segoe UI");
         status = Text("", 12, "#D8B8FF");
         var stack = new StackPanel { Margin = new Thickness(26) };
         Content = new ScrollViewer { Content = stack, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
-        stack.Children.Add(Text("STRIGOI COMPANION", 12, "#BD93F9"));
+        stack.Children.Add(Text(WorkAssistantBridge.IsAvailable ? "STRIGOI COMPANION ASSISTANT" : "STRIGOI COMPANION", 12, "#BD93F9"));
         stack.Children.Add(Text("Control Center", 27));
         stack.Children.Add(Text("O Familiar é a interface principal. Use este painel para ajustes, captura manual e diagnóstico.", 14, "#C1B4D1"));
         stack.Children.Add(Text($"Versão {GetType().Assembly.GetName().Version?.ToString(3)} · captura e Ask/Talk locais.", 13, "#C1B4D1"));
@@ -55,6 +55,11 @@ internal sealed class ControlWindow : Window
         Label(stack, "DIAGNÓSTICO E FALLBACK");
         stack.Children.Add(Button("Captura manual · escolher janela", capture ?? (() => { })));
         stack.Children.Add(Button("Testar com meu jogo", validate ?? (() => { })));
+        if (WorkAssistantBridge.IsAvailable)
+        {
+            Label(stack, "ASSISTENTE DE TRABALHO");
+            stack.Children.Add(Button("Abrir assistente de trabalho · tarefas, notas e checklists", WorkAssistantBridge.Open));
+        }
         stack.Children.Add(Button("Pronto · voltar ao jogo", Close));
         KeyDown += (_, e) => { if (e.Key == Key.Escape) Close(); };
         void Synchronize()

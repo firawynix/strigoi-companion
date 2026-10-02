@@ -128,12 +128,13 @@ internal static class Program
             });
             if (!diagnostic)
             {
-                tray = new Forms.NotifyIcon { Icon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath!) ?? System.Drawing.SystemIcons.Application, Text = "Strigoi Companion", Visible = true };
+                tray = new Forms.NotifyIcon { Icon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath!) ?? System.Drawing.SystemIcons.Application, Text = WorkAssistantBridge.IsAvailable ? "Strigoi Companion Assistant" : "Strigoi Companion", Visible = true };
                 var menu = new Forms.ContextMenuStrip();
                 void Item(string label, Action action) => menu.Items.Add(label, null, (_, _) => app.Dispatcher.Invoke(action));
                 Item("Abrir controles", Open);
                 Item("Testar com meu jogo", Validate);
                 Item("Captura local · escolher janela", Capture);
+                if (WorkAssistantBridge.IsAvailable) Item("Assistente de trabalho · tarefas e notas", WorkAssistantBridge.Open);
                 Item("Bloquear · deixar cliques passar", () => pet.SetMode(InteractionMode.Locked));
                 Item("Reposicionar", () => { pet.Show(); pet.SetMode(InteractionMode.Reposition); });
                 Item("Trazer pet de volta", pet.ResetPosition);

@@ -1,8 +1,14 @@
 # Strigoi Companion
 
-Versão atual do código: **0.7.5**. Aplicativo gratuito para Windows. O código e os recursos visuais são distribuídos sem uma licença de reutilização pública declarada; consulte a proveniência dos sprites antes de redistribuir ou modificar os assets.
+Versão atual do código: **0.8.0**. Aplicativo gratuito para Windows. O código e os recursos visuais são distribuídos sem uma licença de reutilização pública declarada; consulte a proveniência dos sprites antes de redistribuir ou modificar os assets.
 
-O projeto usa o nome **Strigoi Companion** reservado no Microsoft Partner Center. O pacote MSIX para submissão pode ser criado com `scripts/build-store.ps1`; a presença deste código no GitHub não indica aprovação ou disponibilidade na Microsoft Store.
+O projeto usa o nome **Strigoi Companion** reservado no Microsoft Partner Center. A versão 0.7.5 foi enviada para certificação na Microsoft Store em 2 de outubro de 2026; a disponibilidade depende da aprovação. O pacote MSIX pode ser criado com `scripts/build-store.ps1`.
+
+## Dois aplicativos integrados
+
+`scripts/build-suite.ps1` gera dois pacotes Windows x64 gratuitos. **Strigoi Companion Assistant** abre primeiro o visual de jogos do Strigoi e oferece acesso ao Firaw Assistente de Trabalho pelo painel e pela bandeja. **Firaw Assistente de Trabalho** abre primeiro o visual de trabalho do Firaw e oferece acesso ao Familiar de jogos pelo botão **Jogos** e pela bandeja. Cada pacote contém os dois aplicativos completos; o módulo chamado abre em sua própria janela. As preferências e os dados locais de cada aplicativo continuam em seus diretórios próprios.
+
+Para gerar os pacotes, mantenha os repositórios `strigoi-companion` e `firaw-work-assistant` lado a lado e execute `./scripts/build-suite.ps1`. Os ZIPs resultantes ficam em `artifacts/suite/0.8.0/`.
 
 Estratégia de IA atual: [um único VLM local residente, começando pelo 2B](docs/vlm-strategy.md).
 O Ask/Talk experimental usa a imagem atual da captura apenas quando o jogador pergunta.
