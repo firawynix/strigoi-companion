@@ -22,7 +22,7 @@ Aplicativo Windows do Familiar animado. Usa os sprites do pet personalizado cria
 
 ## Abrir
 
-Para usar as funções de jogos e trabalho juntas, baixe o ZIP **Strigoi Companion Assistant** da [versão 0.8.0](https://github.com/firawynix/strigoi-companion/releases/tag/v0.8.0), extraia a pasta inteira e abra `Strigoi.Companion.exe`. Para usar somente o Strigoi original, o instalador **Strigoi-Companion-Setup-0.7.5.exe** está na [versão 0.7.5](https://github.com/firawynix/strigoi-companion/releases/tag/v0.7.5). Ele inclui .NET, instala somente para seu usuário em `%LOCALAPPDATA%/Programs/Strigoi Companion` e registra a desinstalação em Aplicativos do Windows.
+Para usar as funções de jogos e trabalho juntas, escolha um dos dois ZIPs gratuitos da [versão 0.8.0](https://github.com/firawynix/strigoi-companion/releases/tag/v0.8.0). Extraia a pasta inteira. No pacote **Strigoi Companion Assistant**, abra `Strigoi.Companion.exe`; no pacote **Firaw Assistente de Trabalho**, abra `Firaw.WorkAssistant.exe`. Para usar somente o Strigoi original, o instalador **Strigoi-Companion-Setup-0.7.5.exe** está na [versão 0.7.5](https://github.com/firawynix/strigoi-companion/releases/tag/v0.7.5). Ele inclui .NET, instala somente para seu usuário em `%LOCALAPPDATA%/Programs/Strigoi Companion` e registra a desinstalação em Aplicativos do Windows.
 
 ## Familiar-first — 0.5.0
 
