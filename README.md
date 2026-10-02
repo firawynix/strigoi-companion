@@ -2,7 +2,7 @@
 
 Versão atual do código: **0.8.0**. Aplicativo gratuito para Windows. O código e os recursos visuais são distribuídos sem uma licença de reutilização pública declarada; consulte a proveniência dos sprites antes de redistribuir ou modificar os assets.
 
-O projeto usa o nome **Strigoi Companion** reservado no Microsoft Partner Center. A versão 0.7.5 foi enviada para certificação na Microsoft Store em 2 de outubro de 2026; a disponibilidade depende da aprovação. O pacote MSIX pode ser criado com `scripts/build-store.ps1`.
+O [Strigoi Companion](https://apps.microsoft.com/detail/9PHG56TB7W4N) versão 0.7.5 foi publicado gratuitamente na Microsoft Store em 2 de outubro de 2026. A atualização integrada **Strigoi Companion Assistant** versão 0.8.0 usa o mesmo produto da Store; seu pacote pode ser criado com `scripts/build-store-suite.ps1`.
 
 ## Dois aplicativos integrados
 
