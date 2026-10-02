@@ -29,7 +29,7 @@ internal static class WorkAssistantBridge
         }
         catch (Exception ex) when (ex is IOException or Win32Exception or UnauthorizedAccessException)
         {
-            MessageBox.Show(ex.Message, "Strigoi Companion Assistant", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(ex.Message, ProductBrand.IntegratedName, MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

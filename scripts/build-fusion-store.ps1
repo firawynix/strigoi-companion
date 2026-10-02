@@ -83,7 +83,7 @@ function New-Package([string]$kind, [string]$arch) {
 </Package>
 "@
     [IO.File]::WriteAllText((Join-Path $stage 'AppxManifest.xml'),$manifest,[Text.UTF8Encoding]::new($false))
-    $filename = if ($kind -eq 'game') { "Strigoi-Companion-Assistant-1.0.0-$arch.msix" } else { "Firaw-Work-Companion-Assistant-1.0.0-$arch.msix" }
+    $filename = if ($kind -eq 'game') { "Strigoi-Assistant-Companion-1.0.0-$arch.msix" } else { "Firaw-Work-Companion-Assistant-1.0.0-$arch.msix" }
     $package = Join-Path $out $filename
     & $sdk pack /o /d $stage /p $package | Out-Host
     if ($LASTEXITCODE -ne 0) { throw "Falha no pacote $filename." }
@@ -99,7 +99,7 @@ foreach ($current in $kinds) {
     $bundleDir = Join-Path $out "bundle-$current"
     New-Item -ItemType Directory -Path $bundleDir | Out-Null
     Copy-Item -LiteralPath $packages -Destination $bundleDir
-    $bundleName = if ($current -eq 'game') { 'Strigoi-Companion-Assistant-1.0.0.msixbundle' } else { 'Firaw-Work-Companion-Assistant-1.0.0.msixbundle' }
+    $bundleName = if ($current -eq 'game') { 'Strigoi-Assistant-Companion-1.0.0.msixbundle' } else { 'Firaw-Work-Companion-Assistant-1.0.0.msixbundle' }
     $bundle = Join-Path $out $bundleName
     & $sdk bundle /o /bv '1.0.0.0' /d $bundleDir /p $bundle
     if ($LASTEXITCODE -ne 0) { throw "Falha no bundle $bundleName." }

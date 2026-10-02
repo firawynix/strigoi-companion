@@ -15,13 +15,13 @@ internal sealed class ControlWindow : Window
     public ControlWindow(PetWindow pet, Action save, string? warning, Action? validate = null, Action? capture = null)
     {
         this.pet = pet;
-        Title = WorkAssistantBridge.IsAvailable ? "Strigoi Companion Assistant · Control Center" : "Strigoi Companion · Control Center"; Width = 490; Height = 760;
+        Title = WorkAssistantBridge.IsAvailable ? ProductBrand.IntegratedName + " · Control Center" : "Strigoi Companion · Control Center"; Width = 490; Height = 760;
         MinWidth = 400; MinHeight = 460; WindowStartupLocation = WindowStartupLocation.CenterScreen;
         Background = Brush("#17131F"); Foreground = Brush("#F3EBFA"); FontFamily = new FontFamily("Segoe UI");
         status = Text("", 12, "#D8B8FF");
         var stack = new StackPanel { Margin = new Thickness(26) };
         Content = new ScrollViewer { Content = stack, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
-        stack.Children.Add(Text(WorkAssistantBridge.IsAvailable ? "STRIGOI COMPANION ASSISTANT" : "STRIGOI COMPANION", 12, "#BD93F9"));
+        stack.Children.Add(Text(WorkAssistantBridge.IsAvailable ? ProductBrand.IntegratedName.ToUpperInvariant() : "STRIGOI COMPANION", 12, "#BD93F9"));
         stack.Children.Add(Text("Control Center", 27));
         stack.Children.Add(Text("O Familiar é a interface principal. Use este painel para ajustes, captura manual e diagnóstico.", 14, "#C1B4D1"));
         stack.Children.Add(Text($"Versão {GetType().Assembly.GetName().Version?.ToString(3)} · captura e Ask/Talk locais.", 13, "#C1B4D1"));

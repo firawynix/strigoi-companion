@@ -148,7 +148,7 @@ internal static class Program
             });
             if (!diagnostic)
             {
-                tray = new Forms.NotifyIcon { Icon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath!) ?? System.Drawing.SystemIcons.Application, Text = WorkAssistantBridge.IsAvailable ? "Strigoi Companion Assistant" : "Strigoi Companion", Visible = true };
+                tray = new Forms.NotifyIcon { Icon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath!) ?? System.Drawing.SystemIcons.Application, Text = WorkAssistantBridge.IsAvailable ? ProductBrand.IntegratedName : "Strigoi Companion", Visible = true };
                 var menu = new Forms.ContextMenuStrip();
                 void Item(string label, Action action) => menu.Items.Add(label, null, (_, _) => app.Dispatcher.Invoke(action));
                 Item("Abrir controles", Open);
