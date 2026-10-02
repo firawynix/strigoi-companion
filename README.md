@@ -18,11 +18,11 @@ o gate para decidir definitivamente entre 2B e 4B. Watch Mode não está integra
 Na captura local 0.2.3, **Salvar relatório da sessão** cria um JSON de metadados
 em `%LOCALAPPDATA%/StrigoiCompanion/reports`, sem gravar imagens ou conteúdo da tela.
 
-Protótipo Windows do Familiar animado, versão 0.6.0. Usa os sprites do pet personalizado criado para o ChatGPT. Aplicativo independente da IDE Strigoi e do ChatGPT.
+Aplicativo Windows do Familiar animado. Usa os sprites do pet personalizado criado para o ChatGPT. Aplicativo independente da IDE Strigoi e do ChatGPT.
 
 ## Abrir
 
-Execute **Strigoi-Companion-Setup-0.6.0.exe** e siga o assistente em português. Ao terminar, deixe marcada a opção de abrir o Companion. Depois, abra pelo menu Iniciar ou pelo atalho da área de trabalho. O instalador inclui .NET, instala somente para seu usuário em `%LOCALAPPDATA%/Programs/Strigoi Companion` e registra a desinstalação em Aplicativos do Windows.
+Para usar as funções de jogos e trabalho juntas, baixe o ZIP **Strigoi Companion Assistant** da [versão 0.8.0](https://github.com/firawynix/strigoi-companion/releases/tag/v0.8.0), extraia a pasta inteira e abra `Strigoi.Companion.exe`. Para usar somente o Strigoi original, o instalador **Strigoi-Companion-Setup-0.7.5.exe** está na [versão 0.7.5](https://github.com/firawynix/strigoi-companion/releases/tag/v0.7.5). Ele inclui .NET, instala somente para seu usuário em `%LOCALAPPDATA%/Programs/Strigoi Companion` e registra a desinstalação em Aplicativos do Windows.
 
 ## Familiar-first — 0.5.0
 
