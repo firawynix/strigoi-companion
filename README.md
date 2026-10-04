@@ -4,14 +4,14 @@ Versão atual do código: **0.8.0**. Aplicativo gratuito para Windows. O código
 
 O [Strigoi Companion](https://apps.microsoft.com/detail/9PHG56TB7W4N) está publicado gratuitamente na Microsoft Store com o nome **Strigoi Companion**.
 
-## Novos aplicativos combinados — 1.0.0
+## Novos aplicativos combinados — atualização 1.0.1
 
 Os dois novos aplicativos usam os mesmos recursos de planejamento, notas, checklists, avisos, assistente animado, captura de janela, memória de sessão, perguntas com Ollama, pesquisa opcional, replay e relatórios, com identidades e dados separados:
 
-- **Strigoi Assistant Companion**: visual roxo do Strigoi para jogos. O planejador do Firaw roda no mesmo processo, com projetos apresentados como jogos e tarefas como missões.
-- **Firaw - Work Companion Assistant**: visual ciano do Firaw para trabalho. O painel **Acompanhar** reúne os recursos de captura e memória do Strigoi, usando projetos e sessões de trabalho. A captura depende de ativação pelo usuário; a pesquisa na web é opcional.
+- **Strigoi Companion Assistant**: visual roxo do Strigoi para jogos. O planejador completo do Firaw roda no mesmo processo: projetos são jogos, tarefas são missões, com checklist, notas, avisos e stickers. Ao abrir o diário, o jogo em acompanhamento é preenchido como contexto da próxima missão.
+- **Firaw - Work Companion Assistant**: visual ciano do Firaw para trabalho. Além do planejador completo, a edição abre o Familiar animado, seus controles e o painel **Acompanhar** com captura, perguntas locais, memória, sessões, notas, replay, pesquisa opcional e relatórios. O perfil de captura usa projetos e sessões de trabalho; a escolha de janela é explícita por padrão.
 
-As versões originais continuam em seus produtos e perfis. Para gerar os novos pacotes MSIX x64/x86, mantenha este repositório e `firaw-work-assistant` lado a lado. Preencha as identidades reservadas da Store em `installer/fusion-identities.json` e execute `./scripts/build-fusion-store.ps1 -Kind both`. Os pacotes são criados em `artifacts/fusion-store/`.
+As versões originais continuam em seus produtos e perfis. Para gerar os novos pacotes MSIX x64/x86, mantenha este repositório e `firaw-work-assistant` lado a lado. Preencha as identidades reservadas da Store em `installer/fusion-identities.json` e execute `./scripts/build-fusion-store.ps1 -Kind both`. A atualização usa a versão de pacote **1.0.1.0**; use `-Version` para uma versão posterior. Os pacotes são criados em `artifacts/fusion-store/`.
 
 ## Dois aplicativos integrados
 

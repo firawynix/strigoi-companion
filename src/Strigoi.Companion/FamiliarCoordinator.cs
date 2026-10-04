@@ -22,6 +22,18 @@ internal sealed class FamiliarCoordinator : IDisposable
     private readonly DispatcherTimer detector = new() { Interval = TimeSpan.FromSeconds(1.5) };
     private readonly Action<CompanionSettings> updateSettings;
     private readonly bool workMode;
+    internal bool WorkMode => workMode;
+    internal void SetPresentationSettings(CompanionSettings visual)
+    {
+        Settings = Settings with
+        {
+            Scale = visual.Scale, Monitor = visual.Monitor, X = visual.X, Y = visual.Y,
+            Mode = visual.Mode, ReducedMotion = visual.ReducedMotion,
+            Hotkey = visual.Hotkey, Onboarded = visual.Onboarded
+        };
+        updateSettings(Settings);
+        Changed?.Invoke();
+    }
     private readonly string profileDirectory;
     private ChronicleGame? game;
     private ChronicleRun? run;
@@ -68,7 +80,8 @@ internal sealed class FamiliarCoordinator : IDisposable
     }
     internal void RecordNote(string note)
     {
-        if (game is null || run is null || string.IsNullOrWhiteSpace(note)) return;
+        if (string.IsNullOrWhiteSpace(note)) return;
+        if (game is null || run is null) throw new InvalidOperationException(workMode ? "Escolha uma janela de trabalho antes de registrar a nota." : "Escolha um jogo antes de registrar a nota.");
         chronicle.RecordEvent(game, run, session, "work_note", note.Trim(), ChronicleSource.user_stated, 1);
         Changed?.Invoke();
     }
@@ -84,7 +97,7 @@ internal sealed class FamiliarCoordinator : IDisposable
     {
         Settings = Settings with { FollowGameEnabled = enabled };
         updateSettings(Settings);
-        if (enabled && Settings.AutoDetectGame) { detector.Start(); Balloon?.Invoke("Acompanhando jogos."); Presentation?.Invoke(FamiliarPresentation.CanHelp); }
+        if (enabled && Settings.AutoDetectGame) { detector.Start(); Balloon?.Invoke(workMode ? "Acompanhando a janela de trabalho ativa." : "Acompanhando jogos."); Presentation?.Invoke(FamiliarPresentation.CanHelp); }
         else { detector.Stop(); _ = StopAsync(); Balloon?.Invoke("Acompanhamento pausado."); Presentation?.Invoke(FamiliarPresentation.Passive); }
         Changed?.Invoke();
     }
@@ -119,7 +132,7 @@ internal sealed class FamiliarCoordinator : IDisposable
             if (capture.Running) await StopAsync();
             await StartForTargetAsync(foreground, true);
         }
-        catch (Exception ex) { Balloon?.Invoke("Não consegui enxergar o jogo. Clique para escolher a janela."); Presentation?.Invoke(FamiliarPresentation.Warning); Debug.WriteLine(ex); }
+        catch (Exception ex) { Balloon?.Invoke(workMode ? "Não consegui enxergar a janela de trabalho. Escolha outra janela." : "Não consegui enxergar o jogo. Clique para escolher a janela."); Presentation?.Invoke(FamiliarPresentation.Warning); Debug.WriteLine(ex); }
         finally { detecting = false; Changed?.Invoke(); }
     }
 
@@ -150,7 +163,7 @@ internal sealed class FamiliarCoordinator : IDisposable
     {
         askCancellation?.Cancel();
         watchCancellation?.Cancel();
-        if (capture.Running) await capture.Stop("Acompanhamento aguardando um jogo.");
+        if (capture.Running) await capture.Stop(workMode ? "Acompanhamento aguardando uma janela de trabalho." : "Acompanhamento aguardando um jogo.");
         EndSession(); target = null;
         if (Following) Presentation?.Invoke(FamiliarPresentation.CanHelp);
         Changed?.Invoke();
@@ -232,22 +245,22 @@ internal sealed class FamiliarCoordinator : IDisposable
     }
     internal string Recap()
     {
-        if (game is null || run is null) return "Ainda não há um jogo em acompanhamento.";
+        if (game is null || run is null) return workMode ? "Ainda não há um projeto em acompanhamento." : "Ainda não há um jogo em acompanhamento.";
         var state = chronicle.State(game, run);
         var memories = state.Memories.TakeLast(6).Select(x => "• " + x.Summary);
         var promises = state.Promises.Where(x => x.Status == "active").Select(x => "• " + x.Intent);
-        return $"RUN: {run.DisplayName}\n\nPromessas\n{string.Join('\n', promises.DefaultIfEmpty("• Nenhuma promessa ativa."))}\n\nÚltimos acontecimentos\n{string.Join('\n', memories.DefaultIfEmpty("• Ainda não há acontecimentos registrados."))}";
+        return $"{(workMode ? "SESSÃO" : "RUN")}: {run.DisplayName}\n\n{(workMode ? "Compromissos" : "Promessas")}\n{string.Join('\n', promises.DefaultIfEmpty(workMode ? "• Nenhum compromisso ativo." : "• Nenhuma promessa ativa."))}\n\nÚltimos acontecimentos\n{string.Join('\n', memories.DefaultIfEmpty("• Ainda não há acontecimentos registrados."))}";
     }
     internal void SwitchRun(string id)
     {
         if (game is null) return;
         var next = chronicle.Runs(game).FirstOrDefault(x => x.Id == id); if (next is null) return;
-        EndSession(); run = chronicle.OpenRun(game, next.Id, next.DisplayName); session = Settings.AutoStartChronicle ? chronicle.StartSession(game, run) : null; RememberRun(); Balloon?.Invoke($"Run ativa: {run.DisplayName}."); Changed?.Invoke();
+        EndSession(); run = chronicle.OpenRun(game, next.Id, next.DisplayName); session = Settings.AutoStartChronicle ? chronicle.StartSession(game, run) : null; RememberRun(); Balloon?.Invoke($"{(workMode ? "Sessão ativa" : "Run ativa")}: {run.DisplayName}."); Changed?.Invoke();
     }
     internal void CreateRun(string name)
     {
         if (game is null) return;
-        EndSession(); run = chronicle.CreateRun(game, string.IsNullOrWhiteSpace(name) ? "Nova run" : name); session = Settings.AutoStartChronicle ? chronicle.StartSession(game, run) : null; RememberRun(); Balloon?.Invoke($"Nova run: {run.DisplayName}."); Changed?.Invoke();
+        EndSession(); run = chronicle.CreateRun(game, string.IsNullOrWhiteSpace(name) ? (workMode ? "Nova sessão" : "Nova run") : name); session = Settings.AutoStartChronicle ? chronicle.StartSession(game, run) : null; RememberRun(); Balloon?.Invoke($"{(workMode ? "Nova sessão" : "Nova run")}: {run.DisplayName}."); Changed?.Invoke();
     }
     internal void RenameRun(string name)
     {

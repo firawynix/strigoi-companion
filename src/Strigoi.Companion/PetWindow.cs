@@ -49,7 +49,7 @@ internal sealed class PetWindow : Window
     public long RenderedFrames { get; private set; }
     private readonly bool enableShortcut;
 
-    public PetWindow(CompanionSettings settings, Action openTalk, Action openQuickControl, Action toggleFollowing, Action changed, Action recover, bool enableShortcut = true)
+    public PetWindow(CompanionSettings settings, Action openTalk, Action openQuickControl, Action toggleFollowing, Action changed, Action recover, bool enableShortcut = true, bool workMode = false)
     {
         Settings = settings;
         this.openTalk = openTalk;
@@ -58,7 +58,7 @@ internal sealed class PetWindow : Window
         this.changed = changed;
         this.recover = recover;
         this.enableShortcut = enableShortcut;
-        Title = "Strigoi Companion — Familiar";
+        Title = workMode ? "Firaw - Work Companion Assistant · Familiar" : "Strigoi Companion — Familiar";
         WindowStyle = WindowStyle.None;
         AllowsTransparency = true;
         Background = Brushes.Transparent;
@@ -85,14 +85,16 @@ internal sealed class PetWindow : Window
         grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(28) });
         grid.RowDefinitions.Add(new RowDefinition());
         grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24) });
-        badgeBorder = new Border { Child = badge, Background = new SolidColorBrush(Color.FromRgb(42, 30, 57)), CornerRadius = new CornerRadius(10), Padding = new Thickness(9, 3, 9, 3), HorizontalAlignment = HorizontalAlignment.Center, Visibility = Visibility.Hidden };
+        badgeBorder = new Border { Child = badge, Background = new SolidColorBrush(workMode ? Color.FromRgb(10, 61, 75) : Color.FromRgb(42, 30, 57)), CornerRadius = new CornerRadius(10), Padding = new Thickness(9, 3, 9, 3), HorizontalAlignment = HorizontalAlignment.Center, Visibility = Visibility.Hidden };
         grid.Children.Add(badgeBorder);
         Grid.SetRow(image, 1); grid.Children.Add(image);
-        var speechBody = new Border { Child = speechText, Background = new SolidColorBrush(Color.FromRgb(35, 22, 47)), BorderBrush = new SolidColorBrush(Color.FromRgb(184, 138, 230)), BorderThickness = new Thickness(1), CornerRadius = new CornerRadius(14), Padding = new Thickness(14, 10, 14, 10), Effect = new System.Windows.Media.Effects.DropShadowEffect { Color = Colors.Black, Opacity = .45, BlurRadius = 12, ShadowDepth = 3 } };
-        var tail = new System.Windows.Shapes.Polygon { Points = new PointCollection { new Point(0, 0), new Point(16, 0), new Point(8, 8) }, Fill = new SolidColorBrush(Color.FromRgb(35, 22, 47)), Stroke = new SolidColorBrush(Color.FromRgb(184, 138, 230)), StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Center };
+        var bubbleColor = workMode ? Color.FromRgb(10, 30, 44) : Color.FromRgb(35, 22, 47);
+        var accentColor = workMode ? Color.FromRgb(34, 211, 238) : Color.FromRgb(184, 138, 230);
+        var speechBody = new Border { Child = speechText, Background = new SolidColorBrush(bubbleColor), BorderBrush = new SolidColorBrush(accentColor), BorderThickness = new Thickness(1), CornerRadius = new CornerRadius(14), Padding = new Thickness(14, 10, 14, 10), Effect = new System.Windows.Media.Effects.DropShadowEffect { Color = Colors.Black, Opacity = .45, BlurRadius = 12, ShadowDepth = 3 } };
+        var tail = new System.Windows.Shapes.Polygon { Points = new PointCollection { new Point(0, 0), new Point(16, 0), new Point(8, 8) }, Fill = new SolidColorBrush(bubbleColor), Stroke = new SolidColorBrush(accentColor), StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Center };
         speech.Child = new StackPanel { Children = { speechBody, tail } };
         speech.PlacementTarget = image;
-        var follow = new Button { Content = "👁", FontSize = 11, Padding = new Thickness(6, 1, 6, 1), Background = Brushes.Transparent, Foreground = Brushes.WhiteSmoke, BorderBrush = Brushes.Transparent, ToolTip = "Acompanhar jogo: ligar/desligar" };
+        var follow = new Button { Content = "👁", FontSize = 11, Padding = new Thickness(6, 1, 6, 1), Background = Brushes.Transparent, Foreground = Brushes.WhiteSmoke, BorderBrush = Brushes.Transparent, ToolTip = workMode ? "Acompanhar trabalho: ligar/desligar" : "Acompanhar jogo: ligar/desligar" };
         follow.Click += (_, _) => toggleFollowing(); Grid.SetRow(follow, 2); grid.Children.Add(follow);
         Content = grid;
         RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);

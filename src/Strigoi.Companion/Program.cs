@@ -140,6 +140,7 @@ internal static class Program
             var settings = diagnostic ? new CompanionSettings() : store.Load();
             pet = new PetWindow(settings, OpenTalk, OpenQuickControl, () => familiar?.SetFollowing(!(familiar?.Following ?? true)), Save, () => { Log("display-topology-change"); }, !diagnostic);
             familiar = new FamiliarCoordinator(directory, settings, next => { if (pet is not null) { pet.Settings = next; Save(); } });
+            WorkAssistantBridge.CurrentGameName = () => familiar?.Capturing == true ? familiar.GameName : null;
             familiar.Balloon += message => pet?.Say(message);
             familiar.Presentation += presentation => pet.React(presentation switch
             {
@@ -176,12 +177,13 @@ internal static class Program
                         if (fusionSmoke)
                         {
 #if GAME_FUSION
-                            Firaw.WorkAssistant.CompanionModuleHost.OpenGamePlanner(Path.Combine(reportDirectory, "planner"));
+                            Firaw.WorkAssistant.CompanionModuleHost.OpenGamePlanner(Path.Combine(reportDirectory, "planner"), gameName: "Jogo de teste");
                             await Task.Delay(750);
                             if (!Firaw.WorkAssistant.CompanionModuleHost.IsOpen) throw new InvalidOperationException("O diário de jogo não abriu.");
+                            if (Firaw.WorkAssistant.CompanionModuleHost.CurrentGameContext != "Jogo de teste") throw new InvalidOperationException("O diário não recebeu o jogo atual.");
                             Directory.CreateDirectory(reportDirectory);
                             Firaw.WorkAssistant.CompanionModuleHost.SavePreview(Path.Combine(reportDirectory, "strigoi-missions.png"));
-                            File.WriteAllText(Path.Combine(reportDirectory, "fusion-smoke.txt"), "Diário de jogo aberto no processo Strigoi.\n");
+                            File.WriteAllText(Path.Combine(reportDirectory, "fusion-smoke.txt"), "Familiar Strigoi e diário de jogo no mesmo processo, com contexto do jogo atual.\n");
 #endif
                         }
                         else if (storeScreenshot)
