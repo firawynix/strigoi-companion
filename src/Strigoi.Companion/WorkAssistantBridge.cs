@@ -8,6 +8,7 @@ namespace Strigoi.Companion;
 
 internal static class WorkAssistantBridge
 {
+    internal static Func<string?>? CurrentGameName { get; set; }
     internal static string ExecutablePath => Path.Combine(AppContext.BaseDirectory, "WorkAssistant", "Firaw.WorkAssistant.exe");
     internal static bool IsAvailable =>
 #if GAME_FUSION
@@ -21,7 +22,7 @@ internal static class WorkAssistantBridge
         try
         {
 #if GAME_FUSION
-            Firaw.WorkAssistant.CompanionModuleHost.OpenGamePlanner();
+            Firaw.WorkAssistant.CompanionModuleHost.OpenGamePlanner(gameName: CurrentGameName?.Invoke());
 #else
             if (!IsAvailable) throw new FileNotFoundException("O módulo de trabalho não está incluído nesta instalação.");
             Process.Start(new ProcessStartInfo(ExecutablePath) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(ExecutablePath)! });

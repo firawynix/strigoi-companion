@@ -20,16 +20,19 @@ public sealed class WorkCompanionEngine : IDisposable
 {
     private readonly FamiliarCoordinator coordinator;
     private readonly SettingsStore settingsStore;
+    internal FamiliarCoordinator Coordinator => coordinator;
 
     public WorkCompanionEngine(string profileDirectory)
     {
         settingsStore = new SettingsStore(profileDirectory);
         var saved = settingsStore.Load();
+        var existingProfile = File.Exists(Path.Combine(profileDirectory, "settings.json"));
         var settings = saved with
         {
-            FollowGameEnabled = true,
-            AutoDetectGame = File.Exists(Path.Combine(profileDirectory, "settings.json")) && saved.AutoDetectGame,
-            ModelStartupMode = ModelStartupMode.OnFirstInteraction,
+            FollowGameEnabled = !existingProfile || saved.FollowGameEnabled,
+            AutoDetectGame = existingProfile && saved.AutoDetectGame,
+            Hotkey = existingProfile ? saved.Hotkey : 120,
+            ModelStartupMode = existingProfile ? saved.ModelStartupMode : ModelStartupMode.OnFirstInteraction,
             SpoilerPolicy = SpoilerPolicy.full
         };
         coordinator = new FamiliarCoordinator(profileDirectory, settings, settingsStore.Save, workMode: true);

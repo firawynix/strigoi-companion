@@ -1,6 +1,7 @@
 param(
     [ValidateSet('work','game','both')][string]$Kind = 'work',
-    [string]$WorkRoot = (Join-Path $PSScriptRoot '..\..\firaw-work-assistant')
+    [string]$WorkRoot = (Join-Path $PSScriptRoot '..\..\firaw-work-assistant'),
+    [version]$Version = '1.0.1.0'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -9,6 +10,7 @@ $workRoot = [IO.Path]::GetFullPath($WorkRoot)
 $config = Get-Content -LiteralPath (Join-Path $root 'installer\fusion-identities.json') -Raw | ConvertFrom-Json
 $publisher = [string]$config.publisher
 $publisherName = [string]$config.publisherDisplayName
+$releaseVersion = "$($Version.Major).$($Version.Minor).$($Version.Build)"
 $artifacts = [IO.Path]::GetFullPath((Join-Path $root 'artifacts'))
 $runName = Get-Date -Format 'yyyyMMdd-HHmmss'
 $out = [IO.Path]::GetFullPath((Join-Path $artifacts "fusion-store\$runName"))
@@ -65,7 +67,7 @@ function New-Package([string]$kind, [string]$arch) {
     $manifest = @"
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap10 rescap">
-  <Identity Name="$($identity.identityName)" Publisher="$publisher" Version="1.0.0.0" ProcessorArchitecture="$arch" />
+  <Identity Name="$($identity.identityName)" Publisher="$publisher" Version="$Version" ProcessorArchitecture="$arch" />
   <Properties>
     <DisplayName>$display</DisplayName>
     <PublisherDisplayName>$publisherName</PublisherDisplayName>
@@ -83,7 +85,7 @@ function New-Package([string]$kind, [string]$arch) {
 </Package>
 "@
     [IO.File]::WriteAllText((Join-Path $stage 'AppxManifest.xml'),$manifest,[Text.UTF8Encoding]::new($false))
-    $filename = if ($kind -eq 'game') { "Strigoi-Assistant-Companion-1.0.0-$arch.msix" } else { "Firaw-Work-Companion-Assistant-1.0.0-$arch.msix" }
+    $filename = if ($kind -eq 'game') { "Strigoi-Companion-Assistant-$releaseVersion-$arch.msix" } else { "Firaw-Work-Companion-Assistant-$releaseVersion-$arch.msix" }
     $package = Join-Path $out $filename
     & $sdk pack /o /d $stage /p $package | Out-Host
     if ($LASTEXITCODE -ne 0) { throw "Falha no pacote $filename." }
@@ -99,9 +101,9 @@ foreach ($current in $kinds) {
     $bundleDir = Join-Path $out "bundle-$current"
     New-Item -ItemType Directory -Path $bundleDir | Out-Null
     Copy-Item -LiteralPath $packages -Destination $bundleDir
-    $bundleName = if ($current -eq 'game') { 'Strigoi-Assistant-Companion-1.0.0.msixbundle' } else { 'Firaw-Work-Companion-Assistant-1.0.0.msixbundle' }
+    $bundleName = if ($current -eq 'game') { "Strigoi-Companion-Assistant-$releaseVersion.msixbundle" } else { "Firaw-Work-Companion-Assistant-$releaseVersion.msixbundle" }
     $bundle = Join-Path $out $bundleName
-    & $sdk bundle /o /bv '1.0.0.0' /d $bundleDir /p $bundle
+    & $sdk bundle /o /bv "$Version" /d $bundleDir /p $bundle
     if ($LASTEXITCODE -ne 0) { throw "Falha no bundle $bundleName." }
     Get-FileHash -LiteralPath $bundle -Algorithm SHA256 | Select-Object Path,Hash
 }
